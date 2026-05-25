@@ -1,0 +1,179 @@
+# **Pranav Patil**
+
+**Senior Data Engineer**
+📞 7249466676
+📧 [patilpranav6676@gmail.com](mailto:patilpranav6676@gmail.com)
+
+---
+
+## **Professional Summary**
+
+Results-driven **Senior Data Engineer** with **4+ years of experience** in data engineering, cloud architecture, and large-scale data processing. Expertise in designing, developing, and optimizing scalable batch and real-time data pipelines using **AWS, Python, SQL, Apache Spark, Kafka, and Airflow**. Strong hands-on experience with **CI/CD automation, Terraform, Docker, monitoring solutions, and cloud-native architectures**.
+
+Skilled in end-to-end system design across **AWS, Azure, Databricks, and Snowflake** environments, with a strong focus on **performance optimization, automation, cost efficiency, and building reliable production-grade data platforms**.
+
+---
+
+## **Technical Skills**
+
+### **Programming & Query Languages**
+
+* Python
+* SQL
+* PySpark
+
+### **Cloud Platforms**
+
+* AWS
+* Azure
+* Databricks
+* Snowflake
+
+### **Data Engineering & Processing**
+
+* ETL / ELT Pipelines
+* Apache Spark
+* Apache Kafka
+* Apache Airflow
+* Hive
+* Delta Lake
+* DBT
+* Data Modeling & Data Warehousing
+
+### **Databases**
+
+* DynamoDB
+* NoSQL Databases
+
+### **DevOps & Infrastructure**
+
+* Terraform
+* CloudFormation
+* Docker
+* CI/CD (Concourse)
+* Git
+
+### **Monitoring & Analytics**
+
+* Dynatrace
+* AWS CloudWatch
+* Power BI
+* Tableau
+
+### **APIs & Frameworks**
+
+* REST APIs
+* FastAPI
+
+---
+
+## **Professional Experience**
+
+### **Go Digital Technology Consulting LLP**
+
+#### **Senior Data Engineer**
+
+**June 2024 – Present**
+
+* Lead end-to-end architecture design for scalable **batch and real-time data platforms** on AWS.
+* Define robust data architectures across ingestion, processing, and analytics layers.
+* Implement containerized solutions using **Docker** and establish CI/CD best practices.
+* Drive performance optimization and cost-efficient cloud solutions.
+* Provide technical leadership and mentor engineering teams.
+* Ensure delivery of reliable, production-grade data systems.
+
+---
+
+### **Go Digital Technology Consulting LLP**
+
+#### **Data Engineer**
+
+**May 2023 – June 2024**
+
+* Designed and deployed scalable data pipelines using **AWS, Apache Spark, and Kafka**.
+* Converted business requirements into robust technical implementations.
+* Automated deployments using **Docker and CI/CD pipelines**.
+* Improved pipeline reliability, observability, and performance through DevOps automation.
+* Enhanced monitoring capabilities using production-grade observability tools.
+
+---
+
+### **Go Digital Technology Consulting LLP**
+
+#### **Associate Data Engineer**
+
+**March 2022 – May 2023**
+
+* Built and automated ETL pipelines using **Python, Apache Airflow, and AWS EMR**.
+* Streamlined data processing and integration workflows.
+* Improved data quality through validation frameworks.
+* Optimized pipeline performance for faster and more reliable processing.
+
+---
+
+## **Key Projects**
+
+---
+
+### **Outage Verification Tool (OVT)**
+
+**Role:** Data Engineer / Senior Data Engineer
+**Duration:** 2 Years
+
+* Designed and developed a real-time outage verification platform using **Confluent Kafka**, improving incident detection accuracy by **30%**.
+* Built scalable workflow orchestration pipelines using **Apache Airflow**, reducing manual operational effort by **40%**.
+* Developed Kafka orchestration utilities for complex real-time data architectures.
+* Built automated CI/CD pipelines using **Concourse CI** for Docker image build, testing, and deployment to **Amazon ECR**.
+* Integrated **Dynatrace monitoring** for automated failure detection and ticket creation, reducing incident resolution time by **25%**.
+* Designed and implemented **SCD Type 1 & Type 2 pipelines** for historical data management.
+* Established observability and deployment best practices across teams.
+
+---
+
+### **Power Management and Battery Analysis (PMBA)**
+
+**Role:** Data Engineer
+**Duration:** 1 Year
+
+* Designed scalable ETL pipelines using **PySpark, AWS Glue, and Apache Airflow**, reducing data latency by **40%**.
+* Built interactive **Power BI dashboards** for business intelligence and operational insights.
+* Integrated dashboards with **AWS RDS, S3, Athena, and Glue Catalog** for automated refresh.
+* Developed REST API integrations for embedded analytics solutions.
+* Built an automated **Data Quality Validation Framework** with audit logging in AWS RDS.
+
+---
+
+### **Grid Modelling Service (GMS)**
+
+**Role:** Associate Data Engineer
+**Duration:** 1 Year
+
+* Designed end-to-end ingestion and cleansing pipelines using **AWS EMR** for large-scale batch processing.
+* Implemented optimized workflows in **Amazon Neptune** for graph-based analytics.
+* Developed **AWS Fargate** tasks for automated data processing and API integration.
+* Automated validation pipelines using **EventBridge and Lambda**.
+* Generated real-time monitoring reports stored in **Amazon S3** for operational visibility.
+
+---
+
+## **Education**
+
+### **Bachelor of Mechanical Engineering**
+
+PVG College of Engineering
+**CGPA:** 9.1
+**Year of Passing:** 2022
+
+### **Higher Secondary (12th)**
+
+Rajput Junior College
+**Percentage:** 80%
+**Year of Passing:** 2018
+
+---
+
+## **Certifications**
+
+* Amazon Web Services **AWS Certified Data Engineer – Associate (2024)**
+* IBM **Certified Data Scientist**
+* Snowflake **Snowflake Technical Sales Professional**
