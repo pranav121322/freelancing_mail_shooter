@@ -1,5 +1,9 @@
 """
 utils.py — Shared utility functions: parsing, validation, logging setup.
+
+Parsing is now fully flexible — no format required from the user.
+Email is extracted from anywhere in the message (any domain).
+Everything else is treated as the job description.
 """
 
 import re
@@ -19,40 +23,59 @@ def setup_logging(level: str = "INFO") -> None:
 
 
 def is_valid_email(email: str) -> bool:
-    """Validate an email address with a strict RFC-compatible regex."""
-    pattern = r"^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$"
+    """Validate an email address — any domain (gmail, company, etc.)."""
+    pattern = r"[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}"
     return bool(re.match(pattern, email.strip()))
 
 
 def parse_telegram_message(text: str) -> Tuple[Optional[str], Optional[str]]:
     """
-    Parse a Telegram message to extract email and job description.
+    Flexibly extract email and job description from ANY message format.
 
-    Expected format (flexible):
-        Email: hr@company.com
-        JD: <job description text...>
+    Supported formats (all work):
+        1. Completely unformatted:
+               "Please send to hr@company.com, we need a Python dev with 5yr exp..."
+
+        2. Labelled (old format still works):
+               Email: hr@company.com
+               JD: Looking for Python developer...
+
+        3. Mixed / partial — email anywhere, rest is JD
+
+    Strategy:
+        - Find the first valid email address anywhere in the text
+        - Everything else (with email removed) becomes the JD
 
     Returns:
-        (email, jd) tuple. Either value is None if not found.
+        (email, jd) — either can be None if not found.
     """
     email: Optional[str] = None
     jd: Optional[str] = None
 
-    # Match "Email:" or "email:" followed by the address
-    email_match = re.search(
-        r"(?i)^email\s*:\s*(.+)$", text, re.MULTILINE
-    )
-    if email_match:
-        email = email_match.group(1).strip()
+    # Match any email address anywhere in the message
+    email_pattern = r"[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}"
+    email_match = re.search(email_pattern, text)
 
-    # Match "JD:" or "jd:" followed by everything to end of string
-    jd_match = re.search(
-        r"(?i)^jd\s*:\s*(.+?)(?=\n(?:email)\s*:|\Z)",
-        text,
-        re.MULTILINE | re.DOTALL,
-    )
-    if jd_match:
-        jd = jd_match.group(1).strip()
+    if email_match:
+        email = email_match.group(0).strip()
+
+        # Remove the email from the text to get the JD
+        remaining = text[:email_match.start()] + text[email_match.end():]
+
+        # Clean up common label prefixes like "Email:", "JD:", "Mail:"
+        remaining = re.sub(
+            r"(?i)(email|mail|jd|job\s*description|to|contact)\s*[:\-]\s*",
+            " ",
+            remaining,
+        )
+
+        # Collapse extra whitespace
+        remaining = re.sub(r"\n{3,}", "\n\n", remaining)
+        remaining = re.sub(r"[ \t]+", " ", remaining)
+        remaining = remaining.strip()
+
+        if remaining:
+            jd = remaining
 
     return email, jd
 
