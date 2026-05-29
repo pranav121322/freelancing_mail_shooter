@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 
 SCOPES = [
     "https://www.googleapis.com/auth/spreadsheets",
-    "https://www.googleapis.com/auth/drive.file",
+    "https://www.googleapis.com/auth/drive",
 ]
 
 SHEET_HEADERS = ["Timestamp", "Recipient Email", "Subject", "Status", "JD"]
@@ -34,31 +34,24 @@ def _get_worksheet() -> gspread.Worksheet:
 
 def _ensure_headers(ws: gspread.Worksheet) -> None:
     """Create header row if the sheet is empty."""
-    if ws.row_count == 0 or not ws.row_values(1):
-        ws.insert_row(SHEET_HEADERS, index=1)
-        logger.info("Inserted header row into Google Sheet.")
+    try:
+        first_row = ws.row_values(1)
+        if not first_row:
+            ws.insert_row(SHEET_HEADERS, index=1)
+            logger.info("Inserted header row into Google Sheet.")
+    except Exception as exc:
+        logger.warning(f"Could not check/insert headers: {exc}")
 
 
 def _email_already_logged(ws: gspread.Worksheet, recipient_email: str) -> bool:
-    """
-    Check if the recipient email already exists in the sheet (duplicate prevention).
-
-    Args:
-        ws: The active gspread Worksheet object.
-        recipient_email: Email address to search for.
-
-    Returns:
-        True if a prior successful send exists for this email.
-    """
+    """Check if this email was already sent successfully."""
     try:
-        # Column B = "Recipient Email" (index 2 in gspread 1-based)
-        emails_col = ws.col_values(2)  # header + data rows
-        # Skip header row
-        sent_emails = [e.lower() for e in emails_col[1:]]
-        return recipient_email.lower() in sent_emails
+        emails_col = ws.col_values(2)  # Column B = Recipient Email
+        sent_emails = [e.lower().strip() for e in emails_col[1:]]  # skip header
+        return recipient_email.lower().strip() in sent_emails
     except Exception as exc:
         logger.warning(f"Could not check for duplicate email: {exc}")
-        return False  # Fail open — allow logging
+        return False
 
 
 async def log_email(
@@ -67,17 +60,8 @@ async def log_email(
     status: str,
     jd: str,
 ) -> None:
-    """
-    Append a row to the Google Sheet log.
-
-    Args:
-        recipient_email: Target email address.
-        subject: Email subject line.
-        status: 'sent' | 'failed' | 'duplicate'
-        jd: The original job description text.
-    """
+    """Append a row to the Google Sheet log."""
     import asyncio
-
     loop = asyncio.get_event_loop()
 
     def _write() -> None:
@@ -86,33 +70,28 @@ async def log_email(
             _ensure_headers(ws)
 
             timestamp = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")
-            # Truncate JD to prevent cell overflow (Google Sheets limit: 50,000 chars)
             jd_truncated = jd[:2000] + "…" if len(jd) > 2000 else jd
 
             row = [timestamp, recipient_email, subject, status, jd_truncated]
             ws.append_row(row, value_input_option="USER_ENTERED")
-            logger.info(
-                f"Logged to Google Sheets: {recipient_email} | status={status}"
+            logger.info(f"Logged to Google Sheets: {recipient_email} | status={status}")
+
+        except gspread.exceptions.SpreadsheetNotFound:
+            logger.error(
+                f"Google Sheet '{get_settings().google_sheet_name}' not found. "
+                "Check the sheet name and that it's shared with the service account."
             )
+        except gspread.exceptions.APIError as exc:
+            logger.error(f"Google Sheets API error: {exc}")
         except Exception as exc:
-            # Sheet logging failure should NOT block the main flow
-            logger.error(f"Failed to log to Google Sheets: {exc}")
+            logger.error(f"Unexpected Sheets error: {type(exc).__name__}: {exc}")
 
     await loop.run_in_executor(None, _write)
 
 
 async def is_duplicate(recipient_email: str) -> bool:
-    """
-    Async wrapper to check for duplicate sends.
-
-    Args:
-        recipient_email: Email to check.
-
-    Returns:
-        True if this email was already sent successfully.
-    """
+    """Check if this email was already sent."""
     import asyncio
-
     loop = asyncio.get_event_loop()
 
     def _check() -> bool:
